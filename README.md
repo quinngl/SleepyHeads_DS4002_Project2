@@ -3,11 +3,11 @@ Victoria Feist (leader), Quinn Glovier, Adam Cook
 ## Contents of Repository 
 This repository contains all the source code and data necessary to run a TensorFlow machine learning model to diagnose COVID-19 using chest x-rays.
 - SRC Folder
-  * Contains annotated R code file
+  * Contains annotated Python code file
 - Data File Folder
   * Contains method of accessing orginal image files (Original Data) and cleaned image data (Model_Data).
 - Figures Folder
-  * Contains 4 figures
+  * Contains - figures
 - LICENSE.md
   * Statement of MIT License
 - README.md
