@@ -62,6 +62,9 @@ The data after manipulation, ready to be used by the model: [Cleaned Data](https
 Bar graph showing the distrubution of images across 3 patient statuses: healthy, pneumonia, covid.
 <img src="https://github.com/vkf5ugb/SleepyHeads_DS4002_Project2/blob/main/Figures/DataDist.jpeg" title= "Data Distribution">
 
+Accuracy and loss fluctuate over the course of image testing.
+<img src="https://github.com/vkf5ugb/SleepyHeads_DS4002_Project2/blob/main/Figures/Accuracy.jpeg" title= "Accuracy">
+
 ## References
 
 [5]Cook, Adam, Feist, Victoria, Glovier, Quinn. “COVID-19 Diagnosis: Milestone 1,” 14-Mar-2023.Available: https://docs.google.com/document/d/1yZRRc8Uew2SW6e5kopsG7C5JLSKtqQjvSgnSoKYU3J8/edit
