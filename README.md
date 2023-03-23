@@ -29,7 +29,7 @@ set.seed(1234)
 
 
 #### Usage of Code
-- Download the image files and delete the "viral pneumonia" folder.
+- Download the image files and delete the "viral pneumonia" folder. Alternatively, download the cleaned dataset in the Data file.
 - Open the code file in R and ensure your working directory is the folder that contains the data
 - Install necessary packages
 - Run all the code in order to prepare the data, run the model, and evaluate the results
