@@ -49,7 +49,7 @@ The original dataset before any cleaning: [Original Data](https://www.kaggle.com
 
 ### Final Data
 
-The data after manipulation, ready to be used by the model: [Cleaned Data] (https://drive.google.com/drive/folders/1M6D-41vEOOeMSL6QIo5UEMeCqJCpaDne?usp=sharing)
+The data after manipulation, ready to be used by the model: [Cleaned Data](https://drive.google.com/drive/folders/1M6D-41vEOOeMSL6QIo5UEMeCqJCpaDne?usp=sharing)
 
 ### Data Dictionary  
 | Category      | Description                                                     |
