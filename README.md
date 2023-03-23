@@ -60,7 +60,7 @@ The data after manipulation, ready to be used by the model: [Cleaned Data](https
 
 ## Figures
 Bar graph showing the distrubution of images across 3 patient statuses: healthy, pneumonia, covid.
-
+<img src="/Users/victoriafeist/Desktop/DataDist.jpeg" title="Data Distribution">
 
 ## References
 
