@@ -65,6 +65,9 @@ Bar graph showing the distrubution of images across 3 patient statuses: healthy,
 Accuracy and loss fluctuate over the course of image testing.
 <img src="https://github.com/vkf5ugb/SleepyHeads_DS4002_Project2/blob/main/Figures/Accuracy.jpeg" title= "Accuracy">
 
+The model can easily classify normal, healthy lungs as such. However, it can only classify COVID-19 patient lungs correctly ~86% of the time.
+<img src="https://github.com/vkf5ugb/SleepyHeads_DS4002_Project2/blob/main/Figures/CorrectClassifications.jpeg" title= "Correct Classifications">
+
 ## References
 
 [5]Cook, Adam, Feist, Victoria, Glovier, Quinn. “COVID-19 Diagnosis: Milestone 1,” 14-Mar-2023.Available: https://docs.google.com/document/d/1yZRRc8Uew2SW6e5kopsG7C5JLSKtqQjvSgnSoKYU3J8/edit
