@@ -5,7 +5,7 @@ This repository contains all the source code and data necessary to run a TensorF
 - SRC Folder
   * Contains annotated R code file
 - Data File Folder
-  * Contains method of accessing orginal image files (Original Data) and cleaned/downloaded image data (Covid19-dataset).
+  * Contains method of accessing orginal image files (Original Dataset) and cleaned/downloaded image data (Cleaned Dataset).
 - Figures Folder
   * Contains 3 figures
 - LICENSE.md
@@ -49,7 +49,7 @@ The original dataset before any cleaning: [Original Data](https://www.kaggle.com
 
 ### Final Data
 
-The data after manipulation, ready to be used by the model: 
+The data after manipulation, ready to be used by the model: [Cleaned Data] (https://drive.google.com/drive/folders/1M6D-41vEOOeMSL6QIo5UEMeCqJCpaDne?usp=sharing)
 
 ### Data Dictionary  
 | Category      | Description                                                     |
