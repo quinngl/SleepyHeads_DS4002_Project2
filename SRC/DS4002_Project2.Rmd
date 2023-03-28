@@ -1,0 +1,163 @@
+---
+title: "DS 4002 Project 2"
+author: "The Sleepyheads"
+date: '2023-03-21'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+```
+
+```{r}
+#Installing and loading necessary packages
+#install.packages('tensorflow')
+#install.packages('keras')
+#install.packages('tfdatasets')
+#install_tensorflow()
+library(tensorflow)
+library(keras)
+set.seed(1234)
+```
+
+
+```{r}
+#Creating our labels (Covid, Normal) from the names of folders in a local directory containing the image data 
+setwd('/Users/victoriafeist/Desktop/Covid19-dataset')
+label_list <- dir("train/")
+output_n <- length(label_list)
+save(label_list, file="label_list.R")
+
+#Standardizing the size of the images in pixels
+width <- 224
+height<- 224
+target_size <- c(width, height)
+
+#Loading in the training images and splitting the data into training data and a smaller validation set 
+path_train <- '/Users/victoriafeist/Desktop/Covid19-dataset/train'
+train_data_gen <- image_data_generator(rescale = 1/255, 
+  validation_split = .2)
+
+#Creating the training set 
+train_images <- flow_images_from_directory(path_train,
+  train_data_gen,
+  subset = 'training',
+  target_size = target_size,
+  class_mode = "categorical",
+  shuffle=F,
+  classes = label_list,
+  seed = 2021)
+
+#Creating the validation set 
+validation_images <- flow_images_from_directory(path_train,
+ train_data_gen, 
+  subset = 'validation',
+  target_size = target_size,
+  class_mode = "categorical",
+  classes = label_list,
+  seed = 2021)
+
+#Seeing how many images of each class are in the training set 
+table(train_images$classes)
+#0 - covid
+#1 - normal
+```
+
+```{r}
+#Loading a pre-trained neural network: xception-network. Include_top = FALSE because we are adding our own final layer to the network to train with our image data
+mod_base <- application_xception(weights = 'imagenet', 
+   include_top = FALSE, input_shape = c(width, height, 3))
+freeze_weights(mod_base) 
+```
+
+```{r}
+#Creating a function that builds our layer on top of the pre-trained model 
+model_function <- function(learning_rate = 0.001, 
+  dropoutrate=0.2, n_dense=1024){
+  
+  k_clear_session()
+  
+  model <- keras_model_sequential() %>%
+    mod_base %>% 
+    layer_global_average_pooling_2d() %>% 
+    layer_dense(units = n_dense) %>%
+    layer_activation("relu") %>%
+    layer_dropout(dropoutrate) %>%
+    layer_dense(units=output_n, activation="softmax")
+  
+  model %>% compile(
+    loss = "categorical_crossentropy",
+    optimizer = optimizer_adam(lr = learning_rate),
+    metrics = "accuracy"
+  )
+  
+  return(model)
+  
+}
+
+#The model has mostly non-trainable parameters, but our new layer contains 1024 nodes that will be used to classify images as Covid-infected or normal 
+model <- model_function()
+model
+```
+
+```{r}
+#Creating a graph analyzing how training and validation accuracy and loss change as the model iterates - ideally both losses decrease and both accuracies increase  
+batch_size <- 32
+epochs <- 6
+hist <- model %>% fit(
+  train_images,
+  steps_per_epoch = train_images$n %/% batch_size, 
+  epochs = epochs, 
+  validation_data = validation_images,
+  validation_steps = validation_images$n %/% batch_size,
+  verbose = 2
+)
+```
+
+```{r}
+#Importing our test data with the same method as the training data before 
+path_test <- '/Users/victoriafeist/Desktop/Covid19-dataset/test'
+
+test_data_gen <- image_data_generator(rescale = 1/255)
+
+test_images <- flow_images_from_directory(path_test,
+   test_data_gen,
+   target_size = target_size,
+   class_mode = "categorical",
+   classes = label_list,
+   shuffle = F,
+   seed = 2021)
+
+#Feeding our test data into the model to generate accuracy and loss for identification of Covid
+model %>% evaluate_generator(test_images, 
+                     steps = test_images$n)
+```
+
+```{r}
+#Evaluating the predictions made by the model for each class, Covid or Normal and creating values for the percentage of the images that were correctly predicted 
+predictions <- model %>% 
+  predict_generator(
+    generator = test_images,
+    steps = test_images$n
+  ) %>% as.data.frame
+names(predictions) <- paste0("Class",0:1)
+predictions$predicted_class <- 
+  paste0("Class",apply(predictions,1,which.max)-1)
+predictions$true_class <- paste0("Class",test_images$classes)
+predictions %>% group_by(true_class) %>% 
+  summarise(percentage_true = 100*sum(predicted_class == 
+    true_class)/n()) %>% 
+    left_join(data.frame(diagnosis= names(test_images$class_indices), 
+    true_class=paste0("Class",0:39)),by="true_class") %>%
+  select(diagnosis, percentage_true) %>% 
+  mutate(diagnosis = fct_reorder(diagnosis,percentage_true)) %>%
+# Creating a graph of the percentage of correct diagnoses for each class of images 
+  ggplot(aes(x=diagnosis,y=percentage_true,fill=diagnosis, 
+    label=percentage_true)) +
+  geom_col() + theme_minimal() + coord_flip()  + 
+  ggtitle("Percentage Correct Classifications by Diagnosis") + ylab("Diagnosis") + xlab("Percentage of Correct Classifications")
+```
+
+CODE FOR MODEL PRIMARILY ADAPTED FROM: 
+ApokalypsePartyTeam, “How to build your own image recognition app with R! [part 1]: R-bloggers,” R-Bloggers, 16-Mar-2021. [Online]. Available: https://www.r-bloggers.com/2021/03/how-to-build-your-own-image-recognition-app-with-r-part-1/. [Accessed: 23-Mar-2023].
+
+
